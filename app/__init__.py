@@ -7,7 +7,6 @@ app.config.from_object(Configs)
 
 jwt = JWTManager(app)
 
-# Register routes
 from app.routes import routes
 
 app.register_blueprint(routes.bp)
