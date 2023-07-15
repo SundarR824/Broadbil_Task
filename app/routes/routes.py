@@ -49,6 +49,9 @@ def login():
     responses:
       200:
         description: Access token generated successfully
+        examples:
+            application/json:
+                {"access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"}
       401:
         description: Invalid credentials
     """
@@ -59,7 +62,7 @@ def login():
         return jsonify({'message': 'Invalid credentials'}), 401
 
     access_token = create_access_token(identity=username)
-    return jsonify({'access_token': access_token}), 200
+    return make_response(jsonify({'access_token': access_token}), 200)
 
 
 @bp.route('/protected', methods=['GET'])
@@ -73,6 +76,9 @@ def protected():
         responses:
           200:
             description: Protected route accessed successfully
+            examples:
+                application/json:
+                    {"message": "Protected route. User: NAME_OF_USER"}
           401:
             description: Missing or invalid JWT token
         """
@@ -110,19 +116,23 @@ def home_page():
 @jwt_required()
 def find_mark(id_num):
     """
-        Find Mark
+        Find Mark for Student
         ---
         security:
           - JWT: []
+
         responses:
           200:
-            description: {"message": {"number_of_students": 3}}
+            description: Success
+            examples:
+                application/json:
+                    {"message": {"number_of_students": 3}}
           401:
             description: Missing or invalid JWT token
         """
     try:
         db_rec = get_mark(id_num)
-        resp = {"message": db_rec[0]}
+        resp = {"message": db_rec}
     except Exception as err:
         resp = {"message": "An Error occurred", "error": str(err)}
 
@@ -133,20 +143,23 @@ def find_mark(id_num):
 @jwt_required()
 def find_mark_list(student_id):
     """
-        Find Mark List
+        Find Mark List for particular ID
         ---
         security:
           - JWT: []
+
         responses:
           200:
-            description: {"message": {"mark": 90,"subject": "Science"}}
+            description: Success
+            examples:
+                application/json:
+                    {"message": {"mark": 90,"subject": "Science"}}
           401:
             description: Missing or invalid JWT token
         """
-
     try:
         db_rec = get_mark_list(student_id)
-        resp = {"message": db_rec[0]}
+        resp = {"message": db_rec}
     except Exception as err:
         resp = {"message": "An Error occurred", "error": str(err)}
 
@@ -157,13 +170,17 @@ def find_mark_list(student_id):
 @jwt_required()
 def find_student(teacher_id):
     """
-        Find Mark List
+        Find Students by id
         ---
         security:
           - JWT: []
+
         responses:
           200:
-            description: {"message": {"number_of_students": 3}}
+            description: Success
+            examples:
+                application/json:
+                    {"message": {"number_of_students": 3}}
           401:
             description: Missing or invalid JWT token
     """
@@ -180,18 +197,23 @@ def find_student(teacher_id):
 @jwt_required()
 def find_all():
     """
-        Find Mark List
-        ---
-        security:
-          - JWT: []
-        responses:
-          200:
-            description: {"message": [{"first_name": "John",
-    "group_name": 1,"last_name": "Doe","student_id": 1,"subject_title": "Group A" }, {"first_name": "Alice",
-    "group_name": 1,"last_name": "Johnson","student_id": 3,"subject_title": "Group A" }]}
-          401:
-            description: Missing or invalid JWT token
+    Find All Students
+    ---
+    security:
+        -JWT: []
+
+    responses:
+      200:
+        description: Success
+        examples:
+            application/json:
+                {"message": [
+                    {"first_name": "John","group_name": 1,"last_name": "Doe","student_id": 1,"subject_title": "Group A" },
+                    {"first_name": "Alice", "group_name": 1,"last_name": "Johnson","student_id": 3,"subject_title": "Group A" }]}
+      401:
+        description: Invalid credentials
     """
+
     try:
         db_rec = get_all()
         resp = {"message": db_rec}
@@ -205,7 +227,7 @@ def find_all():
 @jwt_required()
 def add_details():
     """
-    Find Mark List
+    Add Details to tables
     ---
     security:
         - JWT: []
@@ -225,11 +247,14 @@ def add_details():
               type: integer
             key:
               type: string
-        responses:
-          200:
-            description: {"message": "Record added successfully"}
-          401:
-            description: Missing or invalid JWT token
+    responses:
+      200:
+        description: Success
+        examples:
+            application/json:
+                {"message": "Record added in students table"}
+      401:
+        description: Missing or invalid JWT token
     """
     try:
         req_json = request.json
@@ -251,8 +276,8 @@ def add_details():
 @jwt_required()
 def update_details(id_num):
     """
-        Find Mark List
-        ---
+    Update Details in table
+    ---
     security:
         - JWT: []
     parameters:
@@ -268,11 +293,14 @@ def update_details(id_num):
               type: string
             group_id:
               type: integer
-        responses:
-          200:
-            description: {"message": "Record Updated successfully"}
-          401:
-            description: Missing or invalid JWT token
+    responses:
+      200:
+        description: Success
+        examples:
+            application/json:
+                {"message": "Record Updated successfully"}
+      401:
+        description: Missing or invalid JWT token
     """
     try:
         req_json = request.json
@@ -293,7 +321,7 @@ def update_details(id_num):
 @jwt_required()
 def delete_details(id_num):
     """
-    Find Mark List
+    Delete Details from Table
     ---
     security:
         - JWT: []
@@ -307,11 +335,14 @@ def delete_details(id_num):
           properties:
             key:
               type: string
-        responses:
-          200:
-            description: {"message": "Record Deleted successfully"}
-          401:
-            description: Missing or invalid JWT token
+    responses:
+      200:
+        description: success
+        examples:
+            application/json:
+                {"message": "Record Deleted successfully"}
+      401:
+        description: Missing or invalid JWT token
     """
     try:
         req_json = request.json

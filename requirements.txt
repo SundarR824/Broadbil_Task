@@ -1,0 +1,7 @@
+Flask
+PyJWT
+pytest
+Flask-Swagger
+Flask-JWT-Extended
+mysql-connector-python
+flasgger
