@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  python_app:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - DB_HOST=sql_database
+      - DB_PORT=3306
+      - DB_NAME=school
+      - DB_USER=root
+      - DB_PASSWORD=sundar123
+
+  sql_database:
+    image: mariadb
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=sundar123
+      - MYSQL_DATABASE=school
