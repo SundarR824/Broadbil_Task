@@ -145,7 +145,7 @@ def delete_subject(subject_id):
     try:
         db_manager = DatabaseManager()
         db_manager.connect()
-        query = f"DELETE FROM subjects where group_id = {subject_id}"
+        query = f"DELETE FROM subjects where subject_id = {subject_id}"
         db_manager.execute_insert_query(query)
         db_manager.close_connection()
         return "Record Deleted from groups table"
