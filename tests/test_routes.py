@@ -67,11 +67,19 @@ def test_find_all_route(client):
     assert isinstance(response.json['message'], list)
 
 
+def test_find_students_by_group_route(client):
+    with client.application.app_context():
+        access_token = create_access_token(identity='john')
+    response = client.get('/find_by_group/2', headers={'Authorization': f'Bearer {access_token}'})
+    assert response.status_code == 200
+    assert isinstance(response.json['message'], list)
+
+
 def test_add_details_route(client):
     with client.application.app_context():
         access_token = create_access_token(identity='john')
     response = client.post('/add_details', headers={'Authorization': f'Bearer {access_token}'},
-                           json={"first_name": "Sundar", "group_id": 2, "key": "Students", "last_name": "Raja"})
+                           json={"first_name": "Sundar", "group_id": 1, "key": "Students", "last_name": "Raja"})
     assert response.status_code == 200
     assert isinstance(response.json['message'], str)
 
@@ -89,7 +97,7 @@ def test_delete_details_route(client):
     with client.application.app_context():
         access_token = create_access_token(identity='john')
     response = client.delete('/delete_details/7', headers={'Authorization': f'Bearer {access_token}'},
-                             json={"key": "delete_group"})
+                             json={"key": "delete_student"})
     assert response.status_code == 200
     assert isinstance(response.json['message'], str)
 

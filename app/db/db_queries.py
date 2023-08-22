@@ -188,7 +188,7 @@ def delete_student(student_id):
         query = f"DELETE FROM students where student_id = {student_id}"
         db_manager.execute_insert_query(query)
         db_manager.close_connection()
-        return "Record Deleted from groups table"
+        return "Record Deleted from student table"
     except Exception as err:
         print(err)
         return None

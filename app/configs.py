@@ -7,7 +7,7 @@ class Configs:
 
 
 class DatabaseConfigs:
-    DATABASE_HOST = 'sql_database'
+    DATABASE_HOST = 'localhost'
     DATABASE_USER = 'root'
     DATABASE_PASSWORD = 'sundar123'
     DATABASE_NAME = 'school'
