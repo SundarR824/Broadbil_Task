@@ -87,9 +87,10 @@ def get_students(teacher_id: int):
     db_manager = DatabaseManager()
     db_manager.connect()
 
-    query = f"SELECT COUNT(DISTINCT s.student_id) AS num_students FROM students s JOIN marks m ON s.student_id = " \
-            f"m.student_id JOIN subjects sub ON m.subject_id = sub.subject_id JOIN teacher t ON sub.subject_id = " \
-            f"t.subject_id WHERE t.teacher_id = {teacher_id};"
+    query = (f"select count(DISTINCT st.student_id), t.teacher_id, sub.title from students st JOIN teacher t on "
+             f"st.group_id = t.group_id JOIN subjects sub on t.subject_id = sub.subject_id where t.tea"
+             f"cher_id= {teacher_id} group by t.group_id")
+
     res = db_manager.execute_select_query(query)
     heading = ('number_of_students', 'teacher', 'subject')
     rest = [dict(zip(heading, i)) for i in res]

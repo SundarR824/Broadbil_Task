@@ -57,6 +57,8 @@ def test_find_student_route(client):
     response = client.get('/find_by_id/students/1', headers={'Authorization': f'Bearer {access_token}'})
     assert response.status_code == 200
     assert isinstance(response.json['message']['number_of_students'], int)
+    assert isinstance(response.json['message']['teacher'], int)
+    assert isinstance(response.json['message']['subject'], str)
 
 
 def test_find_all_route(client):
