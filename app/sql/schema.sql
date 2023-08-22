@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS students (
                            last_name VARCHAR(30),
                            group_id INT,
                            CONSTRAINT FK_Students_Groups FOREIGN KEY (group_id) REFERENCES groups(group_id)
-                           ON DELETE CASCADE
+                           ON DELETE SET NULL
                            ON UPDATE CASCADE
                        );
 -- Create the marks table
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS marks (
                         mark INT,
                         CONSTRAINT FK_Marks_Students FOREIGN KEY (student_id) REFERENCES students(student_id),
                         CONSTRAINT FK_Marks_Subjects FOREIGN KEY (subject_id) REFERENCES subjects(subject_id)
-                        ON DELETE CASCADE
+                        ON DELETE SET NULL
                         ON UPDATE CASCADE
                     );
 -- Create the teacher table
@@ -38,6 +38,6 @@ CREATE TABLE IF NOT EXISTS teacher (
                          group_id INT,
                          CONSTRAINT FK_Teacher_Subjects FOREIGN KEY (subject_id) REFERENCES subjects(subject_id),
                          CONSTRAINT FK_Teacher_Groups FOREIGN KEY (group_id) REFERENCES groups(group_id)
-                         ON DELETE CASCADE
+                         ON DELETE SET NULL
                          ON UPDATE CASCADE
                      );

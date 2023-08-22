@@ -99,6 +99,19 @@ def get_students(teacher_id: int):
     return rest
 
 
+def get_students_by_group(group_id: int):
+    db_manager = DatabaseManager()
+    db_manager.connect()
+
+    query = f"select s.student_id, s.first_name, s.last_name, s.group_id from students s where s.group_id = {group_id}"
+    res = db_manager.execute_select_query(query)
+    heading = ('student_id', 'first_name', 'last_name', 'group_id')
+    rest = [dict(zip(heading, i)) for i in res]
+    db_manager.close_connection()
+
+    return rest
+
+
 def get_mark_list(student_id: int):
     db_manager = DatabaseManager()
     db_manager.connect()
@@ -122,23 +135,37 @@ def get_all():
     query = f"SELECT s.*, g.group_name AS group_name FROM students s JOIN groups g ON s.group_id = g.group_id;"
     res = db_manager.execute_select_query(query)
 
-    heading = ('student_id', 'first_name', 'last_name', 'group_name', 'subject_title', 'teacher_id')
+    heading = ('student_id', 'first_name', 'last_name', 'group_id', 'group_name')
     rest = [dict(zip(heading, i)) for i in res]
     db_manager.close_connection()
     return rest
 
 
+def update_student(first_name, last_name, group_id, student_id):
+    try:
+        db_manager = DatabaseManager()
+        db_manager.connect()
+        query = f"UPDATE students SET first_name = '{first_name}', last_name = '{last_name}', group_id = {group_id}" \
+                f" WHERE student_id = {student_id};"
+        db_manager.execute_insert_query(query)
+        db_manager.close_connection()
+        return "Student record updated"
+    except Exception as err:
+        print(err)
+        return None
+
+
 def delete_group(group_id):
+    return_msg = f"Record Deleted from groups table"
     try:
         db_manager = DatabaseManager()
         db_manager.connect()
         query = f"DELETE FROM groups where group_id = {group_id}"
         db_manager.execute_insert_query(query)
         db_manager.close_connection()
-        return "Record Deleted from groups table"
     except Exception as err:
-        print(err)
-        return None
+        return_msg = err
+    return return_msg
 
 
 def delete_subject(subject_id):
@@ -154,15 +181,14 @@ def delete_subject(subject_id):
         return None
 
 
-def update_student(first_name, last_name, group_id, student_id):
+def delete_student(student_id):
     try:
         db_manager = DatabaseManager()
         db_manager.connect()
-        query = f"UPDATE students SET first_name = '{first_name}', last_name = '{last_name}', group_id = {group_id}" \
-                f" WHERE student_id = {student_id};"
+        query = f"DELETE FROM students where student_id = {student_id}"
         db_manager.execute_insert_query(query)
         db_manager.close_connection()
-        return "Student record updated"
+        return "Record Deleted from groups table"
     except Exception as err:
         print(err)
         return None

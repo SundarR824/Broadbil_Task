@@ -26,7 +26,7 @@ table_keys = {
     "subjects": subjects,
     "teacher": teacher
 }
-delete_tbl_keys = {"delete_group": delete_group, "delete_subject": delete_subject}
+delete_tbl_keys = {"delete_group": delete_group, "delete_subject": delete_subject, "delete_student": delete_student}
 swagger = Swagger(app)
 
 
@@ -187,6 +187,33 @@ def find_student(teacher_id):
     try:
         db_rec = get_students(teacher_id)
         resp = {"message": db_rec[0]}
+    except Exception as err:
+        resp = {"message": "An Error occurred", "error": str(err)}
+
+    return make_response(jsonify(resp))
+
+
+@bp.route('/find_by_group/<int:group_id>', methods=['GET'])
+@jwt_required()
+def find_students_by_group(group_id):
+    """
+        Find Students by id
+        ---
+        security:
+          - JWT: []
+
+        responses:
+          200:
+            description: Success
+            examples:
+                application/json:
+                    {"message": {"number_of_students": 3}}
+          401:
+            description: Missing or invalid JWT token
+    """
+    try:
+        db_rec = get_students_by_group(group_id)
+        resp = {"message": db_rec}
     except Exception as err:
         resp = {"message": "An Error occurred", "error": str(err)}
 
